@@ -57,7 +57,7 @@ function GMR_Hunter_Damage()
 						if CanCastSpell(hunters_mark, t)
 						and not Debuff(t, hunters_mark) then
 							Cast(hunters_mark, t)
-						elseif CanCastSpell(serpent_sting, t) and Health (t) > 20
+						elseif CanCastSpell(serpent_sting, t) and Health (t) > 40
 						and UnitCreatureTypeID(t) ~= 4
 						and UnitCreatureTypeID(t) ~= 3
 						and UnitCreatureTypeID(t) ~= 11
@@ -77,17 +77,17 @@ function GMR_Hunter_Damage()
 						end
 						--Aimed Shot
 						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
-						and not Buff(p, rapid_fire) and not Buff(p, quick_shots) then 
+						and not Buff (p, rapid_fire) and not Buff (p, quick_shots) then 
 						Cast(aimed_shot, t)							
 						elseif CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
-						and (not GMR_AUTO_SHOT_TIMER or GMR_AUTO_SHOT_TIMER >= GetTime()) then
+						and (not GMR_AUTO_SHOT_TIMER or GMR_AUTO_SHOT_TIMER <= GetTime()) then
 							GMR_AUTO_SHOT_TIMER = GetTime()+0.75
 							GMR_AUTO_SHOT = true
 							Cast(auto_shot, t)
 						end
 											
-						if CanCastSpell(arcane_shot, t) and Mana(p) > 70 then
+						if CanCastSpell(arcane_shot, t) and Mana(p) > 70 and Health(t) > 20 and not IsCurrentSpell(aimed_shot) then
 							Cast(arcane_shot, t)
 						elseif CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
