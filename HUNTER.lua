@@ -76,7 +76,7 @@ function GMR_Hunter_Damage()
 							end
 						end
 						--Aimed Shot
-						if CanCastSpell(aimed_shot, t) and Mana(p) > 20 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
+						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
 						and not Buff(p, rapid_fire) and not Buff(p, quick_shots) then 
 						Cast(aimed_shot, t)							
 						elseif CanCastSpell(auto_shot, t)
