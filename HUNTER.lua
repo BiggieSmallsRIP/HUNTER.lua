@@ -14,7 +14,7 @@ end
 local wing_clip, raptor_strike, serpent_sting, arcane_shot, multi_shot  = GetSpellInfo(2974), GetSpellInfo(2973), GetSpellInfo(1978), GetSpellInfo(3044), GetSpellInfo(2643)
 local feed_pet, bestial_wrath, hunters_mark, auto_shot, pet_stun  = GetSpellInfo(6991), GetSpellInfo(19574), GetSpellInfo(1130), GetSpellInfo(75), GetSpellInfo(19577)
 local summon_pet, revive_pet, heal_pet, aimed_shot  = GetSpellInfo(883), GetSpellInfo(982), GetSpellInfo(136), GetSpellInfo(19434)
-local growl, hawk_aspect, slow_shot, pet_stun  = GetSpellInfo(2649), GetSpellInfo(13165), GetSpellInfo(5116), GetSpellInfo(19577)
+local growl, hawk_aspect, slow_shot, quick_shots, pet_stun  = GetSpellInfo(2649), GetSpellInfo(13165), GetSpellInfo(5116), GetSpellInfo(19577), GetSpellInfo(6150)
 local mongoos_bite, monkey_aspect, rapid_fire, berserking = GetSpellInfo(1495), GetSpellInfo(13163), GetSpellInfo(3045), GetSpellInfo(20554)
 local feed_pet_buff, feign_death, pet_spell_lightning_breath = GetSpellInfo(1539), GetSpellInfo(5384), GetSpellInfo(24844)
 
@@ -71,12 +71,13 @@ function GMR_Hunter_Damage()
 							elseif CanCastSpell(berserking)
 							and not Buff(p, rapid_fire) then
 								Cast(berserking)
-							elseif InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 40 then
+							elseif InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 30 then
 								Cast(bestial_wrath)
 							end
 						end
 						--Aimed Shot
-						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 then
+						if CanCastSpell(aimed_shot, t) and Mana(p) > 20 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
+						and not Buff(p, rapid_fire) and not Buff(p, quick_shots)then
 							Cast(aimed_shot, t)
 						elseif CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
