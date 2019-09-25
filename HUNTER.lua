@@ -71,7 +71,7 @@ function GMR_Hunter_Damage()
 							elseif CanCastSpell(berserking)
 							and not Buff(p, rapid_fire) then
 								Cast(berserking)
-							elseif InLoS("Hard", pet) and CanCastSpell(bestial_wrath) then
+							elseif InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 40 then
 								Cast(bestial_wrath)
 							end
 						end
