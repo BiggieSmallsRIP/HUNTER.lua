@@ -75,6 +75,17 @@ function GMR_Hunter_Damage()
 								Cast(bestial_wrath)
 							end
 						end
+						--Aimed Shot
+						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 then
+							Cast(aimed_shot, t)
+						elseif CanCastSpell(auto_shot, t)
+						and not IsCurrentSpell(auto_shot)
+						and (not GMR_AUTO_SHOT_TIMER or GMR_AUTO_SHOT_TIMER <= GetTime()) then
+							GMR_AUTO_SHOT_TIMER = GetTime()+0.5
+							GMR_AUTO_SHOT = true
+							Cast(auto_shot, t)
+						end
+											
 						if CanCastSpell(arcane_shot, t) and Mana(p) > 70 then
 							Cast(arcane_shot, t)
 						elseif CanCastSpell(auto_shot, t)
