@@ -14,9 +14,10 @@ end
 local wing_clip, raptor_strike, serpent_sting, arcane_shot, multi_shot  = GetSpellInfo(2974), GetSpellInfo(2973), GetSpellInfo(1978), GetSpellInfo(3044), GetSpellInfo(2643)
 local feed_pet, bestial_wrath, hunters_mark, auto_shot, pet_stun  = GetSpellInfo(6991), GetSpellInfo(19574), GetSpellInfo(1130), GetSpellInfo(75), GetSpellInfo(19577)
 local summon_pet, revive_pet, heal_pet, aimed_shot  = GetSpellInfo(883), GetSpellInfo(982), GetSpellInfo(136), GetSpellInfo(19434)
-local growl, hawk_aspect, slow_shot, quick_shots, pet_stun  = GetSpellInfo(2649), GetSpellInfo(13165), GetSpellInfo(5116), GetSpellInfo(19577), GetSpellInfo(6150)
+local growl, hawk_aspect, slow_shot, pet_stun  = GetSpellInfo(2649), GetSpellInfo(13165), GetSpellInfo(5116), GetSpellInfo(19577)
 local mongoos_bite, monkey_aspect, rapid_fire, berserking = GetSpellInfo(1495), GetSpellInfo(13163), GetSpellInfo(3045), GetSpellInfo(20554)
 local feed_pet_buff, feign_death, pet_spell_lightning_breath = GetSpellInfo(1539), GetSpellInfo(5384), GetSpellInfo(24844)
+
 
 function HunterHasPet()
 	if GMR_HUNTER_PET ~= "NOEXIST" then
@@ -35,6 +36,8 @@ function GMR_Hunter_Damage()
 			and IsSpellInRange(pet_spell_lightning_breath, t) == 1 then
 				Cast(pet_spell_lightning_breath, t)
 			end
+			
+-- Intimidation 			
 			if GetDistanceBetweenObjects(p, t) >= 10.5 then
 				if UnitTarget("target") == GetPlayerPointer() then
 					if CanCastSpell(pet_stun, t)
@@ -46,13 +49,15 @@ function GMR_Hunter_Damage()
 						Cast(slow_shot, t)
 					end
 				end
+-- Aspect of the Hawk				
 				if CanCastSpell(hawk_aspect)
 				and not Buff(p, hawk_aspect) then
 					if CanCastSpell(hawk_aspect) then
 						Cast(hawk_aspect)
 					end
 				else
-					if (Mana(p) >= 15 
+-- Hunter's Mark and Serpent String				
+					if (Mana(p) >= 25 
 					or GetNumEnemies(t, 5) >= 2) then
 						if CanCastSpell(hunters_mark, t)
 						and not Debuff(t, hunters_mark) then
@@ -61,26 +66,26 @@ function GMR_Hunter_Damage()
 						and UnitCreatureTypeID(t) ~= 4
 						and UnitCreatureTypeID(t) ~= 3
 						and UnitCreatureTypeID(t) ~= 11
+						and UnitCreatureTypeID(t) ~= 9 --mechanical ?
 						and not Debuff(t, serpent_sting) then
 							Cast(serpent_sting, t)
 						end
+--Cooldowns 						
 						if UnitAffectingCombat("player")  then
-							if InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 30 then
-								Cast(bestial_wrath)
-							end
-							if InLoS("Hard", t) and CanCastSpell(rapid_fire) and ENEMY_COMBAT_RANGE >= 8 and Health(t) > 80
+						if InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 30 then
+								Cast(bestial_wrath)							
+							elseif InLoS("Hard", t) and CanCastSpell(rapid_fire) and ENEMY_COMBAT_RANGE >= 8 and Health(t) > 80
 								and not Buff(p, berserking) and not Buff (pet, bestial_wrath) then
 								Cast(rapid_fire)
-							end	
-							if CanCastSpell(berserking)
+							elseif CanCastSpell(berserking)
 								and not Buff(p, rapid_fire) then
 								Cast(berserking)
-							end	
+							end
 						end
-						--Aimed Shot
+--Aimed Shot						
 						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
-						and not Buff (p, rapid_fire) and not Buff (p, quick_shots) then 
-						Cast(aimed_shot, t)							
+						and not Buff (p, rapid_fire) then 
+						Cast(aimed_shot, t)	
 						elseif CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
 						and (not GMR_AUTO_SHOT_TIMER or GMR_AUTO_SHOT_TIMER <= GetTime()) then
@@ -88,8 +93,8 @@ function GMR_Hunter_Damage()
 							GMR_AUTO_SHOT = true
 							Cast(auto_shot, t)
 						end
-											
-						if CanCastSpell(arcane_shot, t) and Mana(p) > 70 and Health(t) > 20 and not IsCurrentSpell(aimed_shot) then
+--Arcane Shot						
+						if CanCastSpell(arcane_shot, t)  and Mana(p) > 70 and Health(t) > 20 and not IsCurrentSpell(aimed_shot) then
 							Cast(arcane_shot, t)
 						elseif CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
@@ -98,9 +103,9 @@ function GMR_Hunter_Damage()
 							GMR_AUTO_SHOT = true
 							Cast(auto_shot, t)
 						end
+--Auto Shot						
 					else
-						if Mana(p) >= 5 
-						and CanCastSpell(auto_shot, t)
+						if CanCastSpell(auto_shot, t)
 						and not IsCurrentSpell(auto_shot)
 						and (not GMR_AUTO_SHOT_TIMER or GMR_AUTO_SHOT_TIMER <= GetTime()) then
 							GMR_AUTO_SHOT_TIMER = GetTime()+0.75
@@ -127,7 +132,7 @@ function GMR_Hunter_Damage()
 				if CanCastSpell(mongoos_bite, t) then
 					Cast(mongoos_bite, t)
 				end
-				if Mana(p) >= 40 and CanCastSpell(raptor_strike, t)
+				if  (CanCastSpell(raptor_strike, t) and Mana(p) >= 40) 
 				and not IsCurrentSpell(raptor_strike) then
 					Cast(raptor_strike, t)
 				end
@@ -178,7 +183,7 @@ if HunterHasPet() then
 		end
 		
 		-- Heal Pet
-		if Health(pet) <= 60 then
+		if Health(pet) <= 60 and InLoS("Hard", t) then
 			if not UnitIsDeadOrGhost(pet)
 			and not UnitCastingInfo("player")
 			and not UnitChannelInfo("player")
@@ -188,7 +193,7 @@ if HunterHasPet() then
 					if GetUnitSpeed("pet") ~= 0 then
 						RunMacroText("/petstay")
 					end
-					if CanCastSpell(heal_pet) and InLoS("Hard", pet) then 
+					if CanCastSpell(heal_pet) then
 						Cast(heal_pet)
 					end
 				elseif (not GMR_PET_FOLLOW_TIMER or GMR_PET_FOLLOW_TIMER <= GetTime()) then
