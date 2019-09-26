@@ -66,7 +66,7 @@ function GMR_Hunter_Damage()
 						and UnitCreatureTypeID(t) ~= 4
 						and UnitCreatureTypeID(t) ~= 3
 						and UnitCreatureTypeID(t) ~= 11
-						and UnitCreatureTypeID(t) ~= 9 --mechanical ?
+						and UnitCreatureTypeID(t) ~= 9 
 						and not Debuff(t, serpent_sting) then
 							Cast(serpent_sting, t)
 						end
