@@ -1,8 +1,8 @@
 local t, f, p, pet = "target", "focus", "player", "pet"
 if IsUsableSpell(GetSpellInfo(75)) then
 	if GetDistanceBetweenObjects(p, t) >= 10.5 then
-		if ENEMY_COMBAT_RANGE ~= 39 then
-			ENEMY_COMBAT_RANGE = 39
+		if ENEMY_COMBAT_RANGE ~= 41 then
+			ENEMY_COMBAT_RANGE = 41
 		end
 	elseif ENEMY_COMBAT_RANGE ~= 5 then
 		ENEMY_COMBAT_RANGE = 5
@@ -65,15 +65,17 @@ function GMR_Hunter_Damage()
 							Cast(serpent_sting, t)
 						end
 						if UnitAffectingCombat("player")  then
-							if InLoS("Hard", t) and CanCastSpell(rapid_fire) and ENEMY_COMBAT_RANGE >= 8 and Health(t) > 80
-							and not Buff(p, berserking) and not Buff (pet, bestial_wrath) then
-								Cast(rapid_fire)
-							elseif CanCastSpell(berserking)
-							and not Buff(p, rapid_fire) then
-								Cast(berserking)
-							elseif InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 30 then
+							if InLoS("Hard", pet) and CanCastSpell(bestial_wrath) and  Health(t) > 30 then
 								Cast(bestial_wrath)
 							end
+							if InLoS("Hard", t) and CanCastSpell(rapid_fire) and ENEMY_COMBAT_RANGE >= 8 and Health(t) > 80
+								and not Buff(p, berserking) and not Buff (pet, bestial_wrath) then
+								Cast(rapid_fire)
+							end	
+							if CanCastSpell(berserking)
+								and not Buff(p, rapid_fire) then
+								Cast(berserking)
+							end	
 						end
 						--Aimed Shot
 						if CanCastSpell(aimed_shot, t) and Mana(p) > 50 and Health(t) > 40 and ENEMY_COMBAT_RANGE >= 8
