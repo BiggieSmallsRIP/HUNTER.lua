@@ -38,7 +38,7 @@ function GMR_Hunter_Damage()
 			end
 			
 -- Intimidation 			
-			if GetDistanceBetweenObjects(p, t) >= 16.5 then
+			if GetDistanceBetweenObjects(p, t) >= 10.5 then
 				if UnitTarget("target") == GetPlayerPointer() then
 					if CanCastSpell(pet_stun, t)
 					and (not PET_STUN_DELAY or PET_STUN_DELAY <= GetTime()) then
