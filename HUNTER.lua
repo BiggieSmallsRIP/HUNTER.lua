@@ -1,7 +1,7 @@
 local t, f, p, pet = "target", "focus", "player", "pet"
 if IsUsableSpell(GetSpellInfo(75)) then
 	if GetDistanceBetweenObjects(p, t) >= 10.5 then
-		if ENEMY_COMBAT_RANGE ~= 41 then
+		if ENEMY_COMBAT_RANGE ~= 40 then
 			ENEMY_COMBAT_RANGE = 41
 		end
 	elseif ENEMY_COMBAT_RANGE ~= 5 then
@@ -138,7 +138,7 @@ function GMR_Hunter_Damage()
 				if CanCastSpell(mongoos_bite, t) then
 					Cast(mongoos_bite, t)
 				end
-				if  (CanCastSpell(raptor_strike, t) and Mana(p) >= 40) 
+				if  (CanCastSpell(raptor_strike, t) and Mana(p) >= 20) 
 				and not IsCurrentSpell(raptor_strike) then
 					Cast(raptor_strike, t)
 				end
